@@ -23,52 +23,53 @@ export default {
 		}
 	},
 	computed: {
-		loaderEnabled () {
+		loaderEnabled() {
 			return !!this.options.loader
 		},
-		isHardConfirm () {
+		isHardConfirm() {
 			return this.options.window === DIALOG_TYPES.CONFIRM &&
-                this.options.type === CONFIRM_TYPES.HARD
+				this.options.type === CONFIRM_TYPES.HARD
 		},
-		isPrompt () {
+		isPrompt() {
 			return (this.options.window === DIALOG_TYPES.PROMPT)
 		},
-		leftBtnComponent () {
+		leftBtnComponent() {
 			return (this.options.reverse === false) ? 'cancel-btn' : 'ok-btn'
 		},
-		rightBtnComponent () {
+		rightBtnComponent() {
 			return (this.options.reverse === true) ? 'cancel-btn' : 'ok-btn'
 		},
-		hardConfirmHelpText () {
+		hardConfirmHelpText() {
 			return this.options.verificationHelp
 				.replace(/\[\+:(\w+)]/g, (match, $1) => {
 					return this.options[$1] || match
 				})
 		},
-		promptHelpText () {
+		promptHelpText() {
 			return this.options.promptHelp
 				.replace(/\[\+:(\w+)]/g, (match, $1) => {
 					return this.options[$1] || match
 				})
 		}
 	},
-	mounted () {
+	mounted() {
 		this.isHardConfirm && this.$refs.inputElem && this.$refs.inputElem.focus()
+		this.input = this.options.message.defaultText || ''
 	},
 	methods: {
-		clickRightBtn () {
+		clickRightBtn() {
 			this.options.reverse ? this.cancel() : this.proceed(this.getDefaultData())
 		},
-		clickLeftBtn () {
+		clickLeftBtn() {
 			this.options.reverse ? this.proceed(this.getDefaultData()) : this.cancel()
 		},
-		submitDialogForm () {
+		submitDialogForm() {
 			this.okBtnDisabled || this.proceed(this.getDefaultData())
 		},
-		getDefaultData () {
+		getDefaultData() {
 			return this.isPrompt ? this.input : null
 		},
-		proceed (withData = null) {
+		proceed(withData = null) {
 			if (this.loaderEnabled) {
 				this.switchLoadingState(true)
 				this.options.promiseResolver({
@@ -83,18 +84,18 @@ export default {
 				this.close()
 			}
 		},
-		cancel () {
+		cancel() {
 			if (this.loading === true) { return }
 			this.close()
 		},
-		switchLoadingState (loading = null) {
+		switchLoadingState(loading = null) {
 			if (loading === null) {
 				loading = !this.loading
 			}
 
 			this.loading = !!loading
 		},
-		close () {
+		close() {
 			this.$emit('close')
 		}
 	},
